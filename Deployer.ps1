@@ -9,6 +9,7 @@
     Prerequisite   : PowerShell, Az module and an Azure subscription :)  
 #>
 
+# First Checks
 # Check if the script is running with administrator privileges
 $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
