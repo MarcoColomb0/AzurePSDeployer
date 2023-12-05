@@ -55,6 +55,7 @@ $VirtualMachine = Set-AzVMSourceImage -VM $VirtualMachine –PublisherName 'Micr
 
 New-AzVM -ResourceGroupName $ResourceGroupName -Location $LocationName -VM $VirtualMachine
 
+Set-AzScheduledAutoshutdown -ResourceGroupName $resourceGroupName -VmName $vmName -ShutdownDaily -ShutdownTime $shutdownTime -TimeZone $timeZone
 
 $PublicIPConnect=Get-AzPublicIpAddress -ResourceGroupName $resourcegroupname -Name $PublicIPAddressName
 
