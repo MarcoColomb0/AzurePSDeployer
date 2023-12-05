@@ -9,10 +9,8 @@
     Prerequisite   : PowerShell, Az module and an Azure subscription :)  
 #>
 
-# First Checks
-# Check if the script is running with administrator privileges
-$isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 function AdministratorCheck {
+    $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
     if ($isAdmin) {
         Write-Host "[INFO] Script is being run as administrator."
     } else {
@@ -21,21 +19,18 @@ function AdministratorCheck {
     } 
 }
 
-# Check if the Az module is installed
-$azModuleInstalled = Get-Module -Name Az* -ListAvailable
 function AzModuleCheck {
+    $azModuleInstalled = Get-Module -Name Az* -ListAvailable
     if ($azModuleInstalled) {
         Write-Host "[INFO] Az module found."
     } else {
         Write-Host "[ERROR] Azure PowerShell Az module is not installed." -ForegroundColor Red
     
-        # Ask the user if they want to install the Az module
         $installAzModule = Read-Host "[PROMPT] Do you want to install the Az module now? (Y/N)"
     
         if ($installAzModule -eq 'Y' -or $installAzModule -eq 'Yes') {
-            # Install the Az module
             Write-Host "[INFO] Az module is installing..."
-            Install-Module -Name Az -AllowClobber -Scope CurrentUser
+            Install-Module -Name Az -AllowClobber -Scope CurrentUser -Force
             Write-Host "[INFO] Az module installed successfully."
         } else {
             Write-Host "[INFO] Az module not installed. Exiting script."
@@ -44,16 +39,15 @@ function AzModuleCheck {
     }
 }
 
-# Check if user is logged in to Azure
-$azSubCheck = Get-AzContext
-function AccountChecks {
-    if ($azSubCheck) {
-        Write-Host "[INFO] Az module is logged in to $($azSubCheck.Account)"
+function AccountCheck {
+    $azLoginCheck = Get-AzContext
+    if ($azLoginCheck) {
+        Write-Host "[INFO] Az module is logged in to $($azLoginCheck.Account)"
     
         $PromptForAccount = Read-Host "[PROMPT] Do you want to keep using this account? (Y/N)"
     
         if ($PromptForAccount -eq 'Y' -or $PromptForAccount -eq 'Yes') {
-            Write-Host "[INFO] Current account: $($azSubCheck.Account)"
+            Write-Host "[INFO] Current account: $($azLoginCheck.Account)"
         } else {
             Write-Host "[WARNING] You will connect another Azure account to PowerShell." -ForegroundColor Yellow
     
@@ -68,30 +62,61 @@ function AccountChecks {
                 }
             } else {
                 Write-Host "[WARNING] Aborting, going back to the Azure Account Login Check."
-                AccountChecks
+                AccountCheck
             }
         }
     } else {
         Write-Host "[WARNING] Az module is not logged in"
         Write-Host "[WARNING] You will connect another Azure account to PowerShell." -ForegroundColor Yellow
     
-            $PromptForAnotherAccount = Read-Host "[PROMPT] Do you want to continue? (Y/N)"
-            if ($PromptForAnotherAccount -eq 'Y' -or $PromptForAnotherAccount -eq 'Yes') {
-                try {
-                    Write-Host "[INFO] Connecting to another account..."
-                    Connect-AzAccount
-                } catch {
-                    Write-Host "[ERROR] An error occurred while connecting to another Azure account: $_" -ForegroundColor Red
-                    exit
-                }
-            } else {
-                Write-Host "[WARNING] Aborting, going back to the Azure Account Login Check."
-                AccountChecks
+        $PromptForAnotherAccount = Read-Host "[PROMPT] Do you want to continue? (Y/N)"
+        if ($PromptForAnotherAccount -eq 'Y' -or $PromptForAnotherAccount -eq 'Yes') {
+            try {
+                Write-Host "[INFO] Connecting to another account..."
+                Connect-AzAccount
+            } catch {
+                Write-Host "[ERROR] An error occurred while connecting to another Azure account: $_" -ForegroundColor Red
+                exit
             }
+        } else {
+            Write-Host "[WARNING] Aborting, going back to the Azure Account Login Check."
+            AccountCheck
+        }
+    }
+}
+
+function SubscriptionCheck {
+    $azSubCheck = Get-AzContext
+    $azSubName = $azSubCheck.Subscription.Name
+    $azSubList = Get-AzSubscription
+    $azSubListName = $azSubList | ForEach-Object { $_.Name }
+
+    if ($azSubCheck) {
+        Write-Host "[INFO] The $($azSubName) is currently selected on the Az module."
+    }
+
+    $PromptForSubscription = Read-Host "[PROMPT] Do you want to keep using this subscription? (Y/N)"
+    
+    if ($PromptForSubscription -eq 'Y' -or $PromptForSubscription -eq 'Yes') {
+        Write-Host "[INFO] Current subscription: $($azSubName)"
+    } else {
+        Write-Host "[WARNING] You will switch your current subscription to another." -ForegroundColor Yellow
+
+        $SelectedSubscription = $azSubList | Out-GridView -PassThru -Title "Subscriptions List"
+        Write-Host "[INFO] The subscription selection window is likely in the background. Please ensure to check your taskbar in order to proceed."
+        
+        if ($SelectedSubscription) {
+            Write-Host "[INFO] Loading the selected subscription: $($SelectedSubscription.Name)"
+            Set-AzContext -Subscription $SelectedSubscription
+        } else {
+            Write-Host "[INFO] No subscription selected. Exiting..."
+            return
+        }
     }
 }
 
 
 AdministratorCheck
 AzModuleCheck
-AccountChecks
+AccountCheck
+SubscriptionCheck
