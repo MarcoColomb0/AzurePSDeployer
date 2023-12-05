@@ -1,5 +1,5 @@
 ﻿$Username='marcocolomb0'
-$Password='12wefojwef!!@' | ConvertTo-SecureString -Force -AsPlainText
+#$Password='12wefojwef!!@' | ConvertTo-SecureString -Force -AsPlainText
 $Credential=New-Object PSCredential($username,$password)
 
 #Parametri VM
