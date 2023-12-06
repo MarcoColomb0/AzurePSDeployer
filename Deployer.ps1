@@ -18,7 +18,7 @@ $ResourceGroupName = 'AzurePSDeployer-rg'
 
 # Virtual machine
 $VMName = 'AzurePSDeployer-vm'
-$ComputerName = 'AzurePSDeployer-vm'
+$ComputerName = 'AzurePSD-vm'
 $VMSize = 'Standard_B2ms'
 $ShutdownTime = '14:15'
 $Timezone = 'Central European Time'
@@ -31,6 +31,7 @@ $VNetName = 'AzurePSDeployer-vnet'
 $NICName = 'AzurePSDeployer-nic'
 $SubnetName = 'AzurePSDeployer-snet'
 $NSGName = 'AzurePSDeployer-nsg'
+$NSGRuleName = 'apsdRDPRule'
 $PublicIPAddressName = 'AzurePSDeployer-pip'
 $SubnetAddressPrefix = '192.168.77.0/24'
 $VNetAddressPrefix = '192.168.0.0/16'
@@ -46,6 +47,26 @@ function AdministratorCheck {
         Write-Host "The source code is available at https://github.com/MarcoColomb0/AzurePSDeployer" -ForegroundColor Red
         exit
     } 
+}
+
+function PasswordComplexityCheck {
+    # Password conditions
+    $LengthRequirement = ($Password.Length -ge 8 -and $Password.Length -le 123)
+    $UppercaseRequirement = $Password -cmatch "[A-Z]"
+    $LowercaseRequirement = $Password -cmatch "[a-z]"
+    $NumericDigitRequirement = $Password -cmatch "\d"
+    $SpecialCharacterRequirement = $Password -cmatch "[^A-Za-z0-9]"
+
+    # Check if at least 3 requirements are met
+    $ComplexityRequirementsMet = @(
+        $UppercaseRequirement,
+        $LowercaseRequirement,
+        $NumericDigitRequirement,
+        $SpecialCharacterRequirement
+    ) | Where-Object { $_ } | Measure-Object | Where-Object { $_.Count -ge 3 }
+
+    # Check all conditions
+    return ($LengthRequirement -and $ComplexityRequirementsMet)
 }
 
 function AzModuleCheck {
@@ -171,13 +192,101 @@ function SubscriptionCheck {
 }
 
 function CreateResourceGroup {
-    # Fix error
-    $CheckRG = Get-AzResourceGroup -Name $ResourceGroupName -ProgressAction SilentlyContinue
+    try {
+        $CheckRG = Get-AzResourceGroup -Name $ResourceGroupName -ErrorAction Stop
+    }
+    catch {
+        Write-Host "[INFO] The resource group was not found and it's being created."
+        New-AzResourceGroup -Name $ResourceGroupName -Location $LocationName | Out-Null
+    }
     if ($CheckRG) {
         Write-Host "[WARNING] Resource group $($ResourceGroupName) was already created, skipping the creation part." -ForegroundColor Yellow
+    } else {
+        Write-Host "[SUCCESS] $($ResourceGroupName) resource group is now available." -ForegroundColor Green
     }
-    else {
-        New-AzResourceGroup -Name $ResourceGroupName -Location $LocationName
+}
+
+function CreateVNetAndSubnet {
+    $CheckVNet = Get-AzVirtualNetwork -Name $VNetName
+    if ($CheckVNet) { 
+        Write-Host "[WARNING] Virtual network $($VNetName) was already created, skipping the creation part." -ForegroundColor Yellow
+    } else {
+        Write-Host "[INFO] The virtual network and the subnet were not found and are being created."
+        $CreatedSubnet = New-AzVirtualNetworkSubnetConfig -Name $SubnetName -AddressPrefix $SubnetAddressPrefix
+        New-AzVirtualNetwork -Name $VNetName -ResourceGroupName $ResourceGroupName -Location $LocationName -AddressPrefix $VNetAddressPrefix -Subnet $CreatedSubnet | Out-Null
+        Write-Host "[SUCCESS] $($VNetName) virtual network and $($SubnetName) subnet are now available." -ForegroundColor Green
+    } 
+}
+
+function CreatePIP {
+    $CheckPIP = Get-AzPublicIpAddress -Name $PublicIPAddressName
+    if ($CheckPIP) {
+        Write-Host "[WARNING] Public IP address $($PublicIPAddressName) was already created, skipping the creation part." -ForegroundColor Yellow
+    } else {
+        Write-Host "[INFO] The public IP address was not found and is begin created."
+        New-AzPublicIpAddress -Name $PublicIPAddressName -DomainNameLabel $DNSNameLabel -ResourceGroupName $ResourceGroupName -Location $LocationName -AllocationMethod Static | Out-Null
+        Write-Host "[SUCCESS] $($PublicIPAddressName) public IP address is now available." -ForegroundColor Green
+    }
+}
+
+function CreateNSG {
+    $CheckNSG = Get-AzNetworkSecurityGroup -Name $NSGName
+    if ($CheckNSG) {
+        Write-Host "[WARNING] Network security group $($NSGName) was already created, skipping the creation part." -ForegroundColor Yellow
+    } else {
+        Write-Host "[INFO] The network security group was not found and is being created."
+        $NSGRuleRDP = New-AzNetworkSecurityRuleConfig -Name $NSGRuleName -Description "Deployed with AzurePSDeployer" -Protocol Tcp -Direction Inbound -Priority 1000 -SourceAddressPrefix * -SourcePortRange * -DestinationAddressPrefix * -DestinationPortRange 3389 -Access Allow
+        New-AzNetworkSecurityGroup -ResourceGroupName $ResourceGroupName -Location $LocationName -name $NSGname -SecurityRules $NSGRuleRDP| Out-Null
+        Write-Host "[SUCCESS] $($NSGName) network security group is now available." -ForegroundColor Green
+    }
+}
+
+function CreateNIC {
+    $VNetID = Get-AzVirtualNetwork -Name $VNetName
+    $PIPID = Get-AzPublicIpAddress -Name $PublicIPAddressName
+    $NSGID = Get-AzNetworkSecurityGroup -Name $NSGName
+
+    $CheckNIC = Get-AzNetworkInterface -Name $NICName
+
+    if ($CheckNIC) {
+        Write-Host "[WARNING] Network interface card $($NICName) was already created, skipping the creation part." -ForegroundColor Yellow
+    } else {
+        Write-Host "[INFO] The network interface card was not found and is being created."
+        New-AzNetworkInterface -Name $NICName -ResourceGroupName $ResourceGroupName -Location $LocationName -SubnetId $VNetID.Subnets[0].Id -PublicIpAddressId $PIPID[0].Id -NetworkSecurityGroupId $NSGID[0].Id | Out-Null
+        Write-Host "[SUCCESS] $($NICName) network interface card is now available." -ForegroundColor Green
+    }
+}
+
+function CreateVM {
+    $NICID = Get-AzNetworkInterface -Name $NICName
+    $CheckVM = Get-AzVM -Name $VMName
+
+    if ($CheckVM) {
+        Write-Host "[WARNING] Virtual machine $($VMName) was already created, skipping the creation part." -ForegroundColor Yellow
+    } else {
+        Write-Host "[INFO] The virtual machine was not found and it's going to be created."
+        
+        do {
+            # Prompt the user for credentials
+            $Credentials = Get-Credential -UserName $UsernamePrompt -Message "Enter the credentials for VM remote access"
+            
+            # Check if the password is valid
+            $PasswordValid = PasswordComplexityCheck -Password $Credentials.GetNetworkCredential().Password
+            
+            if (-not $PasswordValid) {
+                Write-Host "Password is not valid. Please ensure it meets the specified requirements."
+            }
+        } while (-not $PasswordValid)
+
+        Write-Host "[INFO] Virtual machine $($VMName) is being created."
+        
+        $VMBaseConfig = New-AzVMConfig -VMName $VMName -VMSize $VMSize
+        $VMBaseConfig = Set-AzVMOperatingSystem -VM $VMBaseConfig -Windows -ComputerName $ComputerName -Credential $Credentials -ProvisionVMAgent -EnableAutoUpdate
+        $VMBaseConfig = Add-AzVMNetworkInterface -VM $VMBaseConfig -Id $NICID.Id
+        $VMBaseConfig = Set-AzVMSourceImage -VM $VMBaseConfig -PublisherName $ImagePublisher -Offer $ImageOffer -Skus $ImageSKU -Version latest
+        New-AzVM -ResourceGroupName $ResourceGroupName -Location $LocationName -VM $VMBaseConfig | Out-Null
+        # Set-AzScheduledAutoshutdown -ResourceGroupName $ResourceGroupName -VmName $VMName -ShutdownDaily -ShutdownTime $ShutdownTime -TimeZone $Timezone
+        Write-Host "[SUCCESS] Virtual machine $($VMName) is now available." -ForegroundColor Green
     }
 }
 
@@ -186,3 +295,10 @@ AzModuleCheck
 AccountCheck
 SubscriptionCheck
 CreateResourceGroup
+CreateVNetAndSubnet
+CreatePIP
+CreateNSG
+CreateNIC
+CreateVM
+#InfrastructureSummary
+#ConnectWizard
