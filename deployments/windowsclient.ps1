@@ -1,10 +1,10 @@
 <#
 .INFO
-    Script Name: WindowsClient.ps1
+    Script Name: windowsclient.ps1
     Description: Automatic Azure infrastructure deployer (Windows Client)
     
 .NOTES
-    File Name      : WindowsClient.ps1
+    File Name      : windowsclient.ps1
     Author         : MarcoColomb0
     Prerequisite   : PowerShell, Az module and an Azure subscription :)  
 #>
