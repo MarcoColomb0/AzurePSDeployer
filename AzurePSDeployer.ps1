@@ -16,7 +16,7 @@ Write-Host "You are currently able to deploy these services"
 Write-Host "1. Windows 11 Client 23H2"
 Write-Host "2. Windows Server 2022"
 
-$DeploymentPrompt = Read-Host "Enter the number corresponding to the service you want to deploy."
+$DeploymentPrompt = Read-Host "Enter the number corresponding to the service you want to deploy"
 
 # Process user input and deploy the selected service
 switch ($DeploymentPrompt) {
