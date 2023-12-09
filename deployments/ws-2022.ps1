@@ -36,20 +36,20 @@ $VNetAddressPrefix = '192.168.0.0/16'
 $DNSNameLabel = 'apsdws'
 
 # Verifies administrative privileges on the local machine
-function AdministratorCheck
-{
-    $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-    if ($isAdmin)
-    {
-        Write-Host "[INFO] Script is being run as administrator."
-    }
-    else
-    {
-        Write-Host "[ERROR] Please run this script with administrator privileges but do not blindly trust!" -ForegroundColor Red 
-        Write-Host "The source code is available at https://github.com/MarcoColomb0/AzurePSDeployer" -ForegroundColor Red
-        exit
-    } 
-}
+# function AdministratorCheck
+# {
+#     $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+#     if ($isAdmin)
+#     {
+#         Write-Host "[INFO] Script is being run as administrator."
+#     }
+#     else
+#     {
+#         Write-Host "[ERROR] Please run this script with administrator privileges but do not blindly trust!" -ForegroundColor Red 
+#         Write-Host "The source code is available at https://github.com/MarcoColomb0/AzurePSDeployer" -ForegroundColor Red
+#         exit
+#     } 
+# }
 
 # Checks for the presence of the Az module on the local machine; if not found, prompts for installation
 function AzModuleCheck
@@ -507,7 +507,7 @@ username:s:$RDPUsername
 
 
 # Functions execution
-AdministratorCheck
+# AdministratorCheck
 AzModuleCheck
 AccountCheck
 SubscriptionCheck
