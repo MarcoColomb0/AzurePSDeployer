@@ -49,6 +49,10 @@ iwr https://github.com/MarcoColomb0/AzurePSDeployer/raw/main/AzurePSDeployer.ps1
 ### Method #3 (you are able to fully trust the code 😊)
 Cloning the repository or downloading it as an [archive](https://github.com/MarcoColomb0/AzurePSDeployer/archive/refs/heads/main.zip) on your local machine
 
+
+> [!IMPORTANT]  
+> The log file is saved in the current user's temp folder (%temp%). The filename is composed of $VMName (the virtual machine name defined in the variables) and the execution date
+
 ## Credits
 
 This project is maintained by [MarcoColomb0](https://github.com/MarcoColomb0).
