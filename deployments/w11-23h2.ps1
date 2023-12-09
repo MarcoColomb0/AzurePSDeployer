@@ -19,7 +19,7 @@ $ResourceGroupName = 'APSD-WC-rg'
 # Windows Client virtual machine
 $VMName = 'APSD-WC-vm'
 $ComputerName = 'APSD-WC-vm'
-$VMSize = 'Standard_B2s' # Get-AzVMSize -Location (location) | ft
+$VMSize = 'Standard_DS1_v2' # Get-AzVMSize -Location (location) | ft
 $ImagePublisher = 'MicrosoftWindowsDesktop' # Get-AzImagePublisher
 $ImageOffer = 'Windows-11' # Get-AzVMImageOffer
 $ImageSKU = 'win11-23h2-pro' # Get-AzVMImageSku

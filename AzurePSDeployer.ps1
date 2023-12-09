@@ -13,8 +13,8 @@
 
 # Display available services and prompt for user input
 Write-Host "You are currently able to deploy these services"
-Write-Host "1. Windows 11 Client 23H2"
-Write-Host "2. Windows Server 2022"
+Write-Host "1. Windows 11 - 23H2 (Client)"
+Write-Host "2. Windows Server - 2022 Datacenter Edition"
 
 $DeploymentPrompt = Read-Host "Enter the number corresponding to the service you want to deploy"
 
