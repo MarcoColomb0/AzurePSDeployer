@@ -1,12 +1,14 @@
 <#
 .INFO
-    Script Name: windowsclient.ps1
+    Script Name: AzurePSDeployer.ps1
     Description: Automatic Azure infrastructure deployer
     
 .NOTES
-    File Name      : windowsclient.ps1
+    File Name      : AzurePSDeployer.ps1
     Author         : MarcoColomb0
-    Prerequisite   : PowerShell, Az module, and an Azure subscription :)  
+    Repository     : https://github.com/MarcoColomb0/AzurePSDeployer
+    Prerequisite   : PowerShell, Az module, and an Azure subscription :)
+    Description    : A script that functions as a "launcher" for the deployments stored in the GitHub repository at /deployments 
 #>
 
 # Display available services and prompt for user input
@@ -34,6 +36,6 @@ switch ($DeploymentPrompt) {
     }
 }
 
-# Construct the script URL and deploy the selected service
+# Build the script URL and deploy the selected service
 $ScriptURL = "https://github.com/MarcoColomb0/AzurePSDeployer/raw/main/deployments/$DeploymentType"
 Invoke-WebRequest -Uri $ScriptURL | Invoke-Expression
