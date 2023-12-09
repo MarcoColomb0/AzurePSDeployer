@@ -4,6 +4,9 @@ AzurePSDeployer is a PowerShell script designed to simplify and automate the dep
 
 [Skip to Usage (execution commands)](#usage)
 
+## How does it work?
+APSD is based on the templates stored in the [/deployments](https://github.com/MarcoColomb0/AzurePSDeployer/tree/main/deployments) folder. The launcher script ([AzurePSDeployer.ps1](https://github.com/MarcoColomb0/AzurePSDeployer/blob/main/AzurePSDeployer.ps1)) calls the templates stored there via Invoke-WebRequest, allowing you to always have the latest updated version.
+
 ## Features
 
 - Fully customizable, you can create your own templates in /deployments and run them locally (or contribute to the project and [submit a pull request](#how-to-contribute))
