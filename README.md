@@ -30,6 +30,12 @@ Before using AzurePSDeployer, ensure that you have the following prerequisites i
 
 To use AzurePSDeployer, follow the steps below:
 
+> [!WARNING]
+> You may need to modify the ExecutionPolicy on your machine (administration privileges are needed):
+```
+Set-ExecutionPolicy Bypass
+```
+
 ### Method #1 (fastest)
 Using the shortened link and executing the script using `Invoke-WebRequest`
 ```
