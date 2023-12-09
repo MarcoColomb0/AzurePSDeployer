@@ -2,6 +2,8 @@
 
 AzurePSDeployer is a PowerShell script designed to simplify and automate the deployment of resources in Microsoft Azure. This tool aims to streamline the process of provisioning Azure resources, making it more efficient and user-friendly.
 
+[Skip to Usage (installation commands)](#usage)
+
 ## Features
 
 - Fully customizable, you can create your own templates in /deployments and run them locally (or contribute to the project and [submit a pull request](#how-to-contribute))
@@ -26,7 +28,7 @@ Before using AzurePSDeployer, ensure that you have the following prerequisites i
 - PowerShell 5.0+
 - Azure account and a working subscription
 
-## How to Execute
+## Usage
 
 To use AzurePSDeployer, follow the steps below:
 
