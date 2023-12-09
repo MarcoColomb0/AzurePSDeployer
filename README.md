@@ -41,7 +41,7 @@ Using the raw version of the script using `Invoke-WebRequest`
 iwr https://github.com/MarcoColomb0/AzurePSDeployer/raw/main/AzurePSDeployer.ps1 | iex
 ```
 ### Method #3 (you are able to fully trust the code 😊)
-Cloning the repository or downloading it as a `.zip` file
+Cloning the repository or downloading it as an [archive](https://github.com/MarcoColomb0/AzurePSDeployer/archive/refs/heads/main.zip) on your local machine
 
 ## Credits
 
