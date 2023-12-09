@@ -204,6 +204,7 @@ function SubscriptionCheck
     } 
 }
 
+# Checks for a Resource Group with matching name and if not present it creates it
 function CreateResourceGroup
 {
     if ($CheckRG)
@@ -246,6 +247,7 @@ function CreateResourceGroup
     }
 }
 
+# Checks for VNet or Subnet with matching names and if not present it creates them
 function CreateVNetAndSubnet
 {
     $CheckVNet = Get-AzVirtualNetwork -Name $VNetName
@@ -283,6 +285,7 @@ function CreateVNetAndSubnet
     } 
 }
 
+# Checks for Public IP with matching name and if not present it creates it
 function CreatePIP
 {
     $CheckPIP = Get-AzPublicIpAddress -Name $PublicIPAddressName
@@ -319,6 +322,7 @@ function CreatePIP
     }
 }
 
+# Checks for NSG with matching name and if not present it creates it and adds a rule
 function CreateNSG
 {
     $CheckNSG = Get-AzNetworkSecurityGroup -Name $NSGName
@@ -357,6 +361,7 @@ function CreateNSG
     }
 }
 
+# Checks for NIC with matching name and if not present it creates it
 function CreateNIC
 {
     $VNetID = Get-AzVirtualNetwork -Name $VNetName
@@ -399,6 +404,7 @@ function CreateNIC
     }
 }
 
+# Checks for VM with matching name and creates it with properties that were defined earlier
 function CreateVM
 {
     $NICID = Get-AzNetworkInterface -Name $NICName
@@ -449,6 +455,7 @@ function CreateVM
     }
 }
 
+# Prints a summary of the provisioned resources and builds the DNS name (that is not obtainable in the same shell due to Az module limitations)
 function InfrastructureSummary
 {
     Write-Host "[SUCCESS] The tool has finished setting up your Azure infrastructure" -ForegroundColor Green
@@ -465,6 +472,7 @@ function InfrastructureSummary
     Write-Host "DNS name: $($DNSNameLabel).$($LocationName).cloudapp.azure.com"
 }
 
+# Prompts the user for connection and if the user accepts it builds an RDP file and execute it through "mstsc.exe"
 function ConnectWizard
 {
     $RDPAddress = "$($DNSNameLabel).$($LocationName).cloudapp.azure.com"
@@ -498,7 +506,7 @@ username:s:$RDPUsername
 
 
 
-
+# Functions execution
 AdministratorCheck
 AzModuleCheck
 AccountCheck

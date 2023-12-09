@@ -13,22 +13,18 @@
 
 # Display available services and prompt for user input
 Write-Host "You are currently able to deploy these services"
-Write-Host "1. WindowsClient"
-Write-Host "2. UbuntuServer"
-Write-Host "3. WindowsServer"
+Write-Host "1. Windows 11 Client 23H2"
+Write-Host "2. Windows Server 2022"
 
 $DeploymentPrompt = Read-Host "Enter the number corresponding to the service you want to deploy."
 
 # Process user input and deploy the selected service
 switch ($DeploymentPrompt) {
     "1" {
-        $DeploymentType = "WindowsClient"
+        $DeploymentType = "w11-23h2"
     }
     "2" {
-        $DeploymentType = "UbuntuServer"
-    }
-    "3" {
-        $DeploymentType = "WindowsServer"
+        $DeploymentType = "ws-2022"
     }
     default {
         Write-Host "Invalid selection. Exiting script."
