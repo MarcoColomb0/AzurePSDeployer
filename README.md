@@ -4,34 +4,50 @@ AzurePSDeployer is a PowerShell script designed to simplify and automate the dep
 
 ## Features
 
-- [Feature 1]
-- [Feature 2]
-- [Feature 3]
-- ...
+- Fully customizable, you can create your own templates in /deployments and run them locally (or contribute to the project and [submit a pull request](#how-to-contribute))
+- Checks if the Az module is present and fully functional
+- Validates and sets the Azure account for deployment
+- Confirms the selected subscription by prompting the user to choose one
+- Automates the creation of:
+  - Resource groups
+  - Virtual networks and subnets
+  - Public IP addresses
+  - Network security groups and their rules
+  - Network interface cards
+  - Virtual machines
+- Provides a general summary of the created resources
+- Automates the RDP connection
 
 ## Prerequisites
 
 Before using AzurePSDeployer, ensure that you have the following prerequisites in place:
 
-- [Prerequisite 1]
-- [Prerequisite 2]
-- [Prerequisite 3]
-- ...
+- Windows machine (could work on other OSes too)
+- PowerShell 5.0+
+- Azure account and a working subscription
 
 ## How to Execute
 
 To use AzurePSDeployer, follow the steps below:
 
-1. [Step 1]
-2. [Step 2]
-3. [Step 3]
-4. ...
+### Method #1 (fastest)
+Using the shortened link and executing the script using `Invoke-WebRequest`
+```
+iwr l.marco.wf/deploy | iex
+```
+### Method #2
+Using the raw version of the script using `Invoke-WebRequest`
+```
+iwr https://github.com/MarcoColomb0/AzurePSDeployer/raw/main/AzurePSDeployer.ps1 | iex
+```
+### Method #3 (you are able to fully trust the code 😊)
+Cloning the repository or downloading it as a `.zip` file
 
 ## Credits
 
 This project is maintained by [MarcoColomb0](https://github.com/MarcoColomb0).
 
-You can find me on:
+You can find me at:
 - [My website](https://marco.wf)
 - [LinkedIn](https://linkedin.com/in/marcocolomb0)
 - [Twitter](https://twitter.com/MarcoColomb0)
