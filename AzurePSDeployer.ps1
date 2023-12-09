@@ -33,5 +33,5 @@ switch ($DeploymentPrompt) {
 }
 
 # Build the script URL and deploy the selected service
-$ScriptURL = "https://github.com/MarcoColomb0/AzurePSDeployer/raw/main/deployments/$DeploymentType"
+$ScriptURL = "https://github.com/MarcoColomb0/AzurePSDeployer/raw/main/deployments/$DeploymentType.ps1"
 Invoke-WebRequest -Uri $ScriptURL | Invoke-Expression
