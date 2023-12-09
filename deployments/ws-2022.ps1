@@ -1,10 +1,10 @@
 <#
 .INFO
-    Script Name: w11-23h2.ps1
-    Description: Automatic Azure infrastructure deployer (Windows Client)
+    Script Name: ws-2022.ps1
+    Description: Automatic Azure infrastructure deployer (Windows Server)
     
 .NOTES
-    File Name      : w11-23h2.ps1
+    File Name      : ws-2022.ps1
     Author         : MarcoColomb0
     Prerequisite   : PowerShell, Az module and an Azure subscription :)  
 #>
@@ -14,26 +14,26 @@
 $LocationName = 'westeurope' # Get-AzLocation | ft
 
 # Resource group
-$ResourceGroupName = 'APSD-WC-rg'
+$ResourceGroupName = 'APSD-WS-rg'
 
 # Windows Client virtual machine
-$VMName = 'APSD-WC-vm'
-$ComputerName = 'APSD-WC-vm'
-$VMSize = 'Standard_B2s' # Get-AzVMSize -Location (location) | ft
-$ImagePublisher = 'MicrosoftWindowsDesktop' # Get-AzImagePublisher
-$ImageOffer = 'Windows-11' # Get-AzVMImageOffer
-$ImageSKU = 'win11-23h2-pro' # Get-AzVMImageSku
+$VMName = 'APSD-WS-vm'
+$ComputerName = 'APSD-WS-vm'
+$VMSize = 'Standard_B2ms' # Get-AzVMSize -Location (location) | ft
+$ImagePublisher = 'MicrosoftWindowsServer' # Get-AzImagePublisher
+$ImageOffer = 'WindowsServer' # Get-AzVMImageOffer
+$ImageSKU = '2022-datacenter' # Get-AzVMImageSku
 
 # Network
-$VNetName = 'APSD-WC-vnet'
-$NICName = 'APSD-WC-nic'
-$SubnetName = 'APSD-WC-snet'
-$NSGName = 'APSD-WC-nsg'
+$VNetName = 'APSD-WS-vnet'
+$NICName = 'APSD-WS-nic'
+$SubnetName = 'APSD-WS-snet'
+$NSGName = 'APSD-WS-nsg'
 $NSGRuleName = 'apsdRDPRule'
-$PublicIPAddressName = 'APSD-WC-pip'
+$PublicIPAddressName = 'APSD-WS-pip'
 $SubnetAddressPrefix = '192.168.77.0/24'
 $VNetAddressPrefix = '192.168.0.0/16'
-$DNSNameLabel = 'apsdwc'
+$DNSNameLabel = 'apsdws'
 
 # Verifies administrative privileges on the local machine
 function AdministratorCheck
