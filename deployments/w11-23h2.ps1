@@ -14,7 +14,7 @@
 $LocationName = 'westeurope' # Get-AzLocation | ft
 
 # Resource group
-$ResourceGroupName = 'APSD-WC-rg'
+$ResourceGroupName = 'APSD-Infra-rg'
 
 # Windows Client virtual machine
 $VMName = 'APSD-WC-vm'
@@ -25,10 +25,10 @@ $ImageOffer = 'Windows-11' # Get-AzVMImageOffer
 $ImageSKU = 'win11-23h2-pro' # Get-AzVMImageSku
 
 # Network
-$VNetName = 'APSD-WC-vnet'
+$VNetName = 'APSD-Infra-vnet'
 $NICName = 'APSD-WC-nic'
-$SubnetName = 'APSD-WC-snet'
-$NSGName = 'APSD-WC-nsg'
+$SubnetName = 'APSD-Infra-snet'
+$NSGName = 'APSD-Infra-nsg'
 $NSGRuleName = 'apsdRDPRule'
 $PublicIPAddressName = 'APSD-WC-pip'
 $SubnetAddressPrefix = '192.168.77.0/24'
