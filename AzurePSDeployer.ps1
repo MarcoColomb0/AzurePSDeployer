@@ -12,7 +12,7 @@
 #>
 
 # Display available services and prompt for user input
-Write-Host "🌟 You are currently able to deploy these services"
+Write-Host "You are currently able to deploy these services"
 Write-Host "1. Windows 11 - 23H2 (Client)"
 Write-Host "2. Windows Server - 2022 Datacenter Edition"
 
@@ -27,12 +27,12 @@ switch ($DeploymentPrompt) {
         $DeploymentType = "ws-2022"
     }
     default {
-        Write-Host "❌ Invalid selection. Exiting script." -ForegroundColor Red
+        Write-Host "Invalid selection. Exiting script." -ForegroundColor Red
         exit
     }
 }
 
 # Build the script URL and deploy the selected service
 $ScriptURL = "https://github.com/MarcoColomb0/AzurePSDeployer/raw/main/deployments/$DeploymentType.ps1"
-Write-Host "🚀 Starting $DeploymentType deployment..." -ForegroundColor Green
+Write-Host "Starting $DeploymentType deployment..." -ForegroundColor Green
 Invoke-WebRequest -Uri $ScriptURL | Invoke-Expression
