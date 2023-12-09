@@ -501,7 +501,7 @@ username:s:$RDPUsername
     } 
     Write-Host "Thank you for using this script!" -ForegroundColor Green
     Write-Host "Give the repository a star if you like the project at https://github.com/MarcoColomb0/AzurePSDeployer" -ForegroundColor Gray
-    Write-Host "🐛 Report bugs at https://github.com/MarcoColomb0/AzurePSDeployer/issues" -ForegroundColor Gray
+    Write-Host "Report bugs at https://github.com/MarcoColomb0/AzurePSDeployer/issues" -ForegroundColor Gray
 }
 
 
