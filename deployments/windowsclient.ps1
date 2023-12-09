@@ -307,7 +307,7 @@ function CreateVM
         Update-AzConfig -DisplayRegionIdentified $false | Out-Null
         Write-Host "[INFO] The virtual machine was not found and it's going to be created."
         Write-Host "[INFO] The credentials selection window is likely in the background. Please ensure to check your taskbar in order to proceed."
-        $global:Credentials = Get-Credential -UserName $UsernamePrompt -Message "Enter the credentials for VM remote access"
+        $global:Credentials = Get-Credential -Message "Enter the credentials for VM remote access"
         Write-Host "[INFO] Virtual machine $($VMName) is being created (this may take a while)."
         $VMBaseConfig = New-AzVMConfig -VMName $VMName -VMSize $VMSize
         $VMBaseConfig = Set-AzVMOperatingSystem -VM $VMBaseConfig -Windows -ComputerName $ComputerName -Credential $Credentials -ProvisionVMAgent -EnableAutoUpdate
