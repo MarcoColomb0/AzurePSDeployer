@@ -1,7 +1,7 @@
 <#
 .INFO
     Script Name: w11-23h2.ps1
-    Description: Automatic Azure infrastructure deployer (Windows Client)
+    Description: Automatic Azure infrastructure deployer (Windows Server)
     
 .NOTES
     File Name      : w11-23h2.ps1
@@ -11,36 +11,38 @@
 
 ## Infrastructure parameters
 # Generic parameters
+$GenericName = Read-Host "Choose a generic name for the resources (for example: APSD-Infra)"
 $LocationName = 'westeurope' # Get-AzLocation | ft
 
 # Resource group
-$ResourceGroupName = 'APSD-Infra-rg'
+$ResourceGroupName = "$($GenericName)-rg"
 
 # Windows Client virtual machine
-$VMName = 'APSD-WC-vm'
-$ComputerName = 'APSD-WC-vm'
+$VMName = "$($GenericName)-vm"
+$CleanedCN = $GenericName -replace '[^a-z]'
+$ComputerName = $CleanedCN.Substring(0, [System.Math]::Min(15, $CleanedCN.Length))
 $VMSize = 'Standard_DS1_v2' # Get-AzVMSize -Location (location) | ft
 $ImagePublisher = 'MicrosoftWindowsDesktop' # Get-AzImagePublisher
 $ImageOffer = 'Windows-11' # Get-AzVMImageOffer
 $ImageSKU = 'win11-23h2-pro' # Get-AzVMImageSku
 
 # Network
-$VNetName = 'APSD-Infra-vnet'
-$NICName = 'APSD-WC-nic'
-$SubnetName = 'APSD-Infra-snet'
-$NSGName = 'APSD-Infra-nsg'
+$VNetName = "$($GenericName)-vnet"
+$NICName = "$($GenericName)-nic"
+$SubnetName = "$($GenericName)-snet"
+$NSGName = "$($GenericName)-nsg"
 $NSGRuleName = 'apsdRDPRule'
-$PublicIPAddressName = 'APSD-WC-pip'
+$PublicIPAddressName = "$($GenericName)-pip"
 $SubnetAddressPrefix = '192.168.77.0/24'
 $VNetAddressPrefix = '192.168.0.0/16'
 
 # Generate DNS name
-# Generate a 10 characters string for the DNS name
-$characters = 'abcdefghijklmnopqrstuvwxyz'
-$randomString = -join ($characters.ToCharArray() | Get-Random -Count 10)
+# Parse it and make it lowercase
+$LowercaseDNS = $GenericName.ToLower()
+$CleanedDNS = $LowercaseDNS -replace '[^a-z]'
 
-# Assign the string to the variable
-$DNSNameLabel = $randomString
+# Assign the string to the variable and limit to 14 chars
+$DNSNameLabel = $CleanedDNS.Substring(0, [System.Math]::Min(14, $CleanedDNS.Length))
 
 # Logs
 $LogsDate = Get-Date -format dd-MM-yyyy
