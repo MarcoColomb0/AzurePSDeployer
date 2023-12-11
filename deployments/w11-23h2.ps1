@@ -33,7 +33,14 @@ $NSGRuleName = 'apsdRDPRule'
 $PublicIPAddressName = 'APSD-WC-pip'
 $SubnetAddressPrefix = '192.168.77.0/24'
 $VNetAddressPrefix = '192.168.0.0/16'
-$DNSNameLabel = 'apsdwc'
+
+# Generate DNS name
+# Generate a 10 characters string for the DNS name
+$characters = 'abcdefghijklmnopqrstuvwxyz'
+$randomString = -join ($characters.ToCharArray() | Get-Random -Count 10)
+
+# Assign the string to the variable
+$DNSNameLabel = $randomString
 
 # Logs
 $LogsDate = Get-Date -format dd-MM-yyyy
