@@ -11,7 +11,7 @@
 
 ## Infrastructure parameters
 # Generic parameters
-$GenericName = Read-Host "Choose a generic name for the resources (for example: APSD-Infra)"
+$GenericName = Read-Host "[PROMPT] Choose a generic name for the resources (for example: APSD-Infra)"
 $LocationName = 'westeurope' # Get-AzLocation | ft
 
 # Resource group
@@ -62,7 +62,7 @@ function AzModuleCheck {
     
         if ($installAzModule -eq 'Y' -or $installAzModule -eq 'Yes') {
             Write-Host "[INFO] Az module is installing..."
-                
+            Install-Module -Name Az -Repository PSGallery -Force | Out-Null
             Write-Host "[INFO] Az module installed successfully."
         }
         else {
