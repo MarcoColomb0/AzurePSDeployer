@@ -1,4 +1,6 @@
 # AzurePSDeployer
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FMarcoColomb0%2FAzurePSDeployer.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FMarcoColomb0%2FAzurePSDeployer?ref=badge_shield)
+
 
 AzurePSDeployer is a PowerShell script designed to simplify and automate the deployment of resources in Microsoft Azure. This tool aims to streamline the process of provisioning Azure resources, making it more efficient and user-friendly.
 
@@ -93,3 +95,7 @@ git push origin feature/new-feature
 - Test your changes thoroughly before submitting a pull request.
 
 Thank you for contributing to AzurePSDeployer! Your efforts are greatly appreciated.
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FMarcoColomb0%2FAzurePSDeployer.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FMarcoColomb0%2FAzurePSDeployer?ref=badge_large)
